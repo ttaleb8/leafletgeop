@@ -55,7 +55,8 @@
         'Satellite': satellite
     };
 
-    const   terrain1 = L.marker([33.959808147310675, -6.889056721662617]).bindPopup('Grand terrain pour les matchs oficiels'),
+    const   terrain1 = L.marker([33.959808147310675, -6.889056721662617]).bindPopup('Grand terrain pour les matchs oficiels'+'<img src="image/stade1.png"/>'+
+        '<br>'+'<a href="https://www.clubs.ma/rabat/complexe-sportif-prince-moulay-abdellah">csma</a>'),
         terrain2 = L.marker([33.96206841613198, -6.89289764467176]).bindPopup('Entrainement 1');
         terrain3 = L.marker([33.95719116981158, -6.892113334281574]).bindPopup('Entrainement 2');
 
@@ -67,7 +68,9 @@
     const layerControl = L.control.layers(baseLayers, overlays).addTo(map);
    /////////////////////////
     const marker1 = L.marker([33.962477749731846, -6.886910954618402])
-        .bindPopup('<b>Salle Omnisport Moulay Abdellah</b><br />Salle Couverte');
+        .bindPopup('<b>Salle Omnisport Moulay Abdellah</b><br />Salle Couverte'+
+        '<br>'+'<img src="image/omnisport22.png "/>'+
+        '<br>'+'<a href="https://soamaps.com/country/MA/41811/salle-omnisport-moulay-abdellah">salle</a>' );
     const marker10 = L.marker([33.96070358416139, -6.8864462258927945])
         .bindPopup('<b>Personnal Tainer HBX Simo</b><br />Salle de GYM');
     const salles= L.layerGroup([marker1, marker10]);
@@ -76,12 +79,14 @@
     const marker3 = L.marker([33.95794596475482, -6.891919685955194])
         .bindPopup('<b>Federation Royale Marocaine d*athletisme</b><br />Bureaux');
     const marker8 = L.marker([33.95935482146281, -6.8914040778841485])
-        .bindPopup('<b>Comite national olympique marocain</b><br />Comite national olympique marocain');
+        .bindPopup('<b>Comite national olympique marocain</b><br />Comite national olympique marocain'+
+        '<br>'+'<img src="image/olymp1.png " width=90%/>');
     const bureaux = L.layerGroup([marker8, marker3]);
     layerControl.addOverlay(bureaux, 'Bureaux');
     //////////////////////
     const marker13 = L.marker([33.9607556028912, -6.888733847147259]).bindPopup('<b>Tribune</b><br />Tribune');
-    const marker5 = L.marker([33.95875975430458, -6.888674363861543]).bindPopup('<b>Montre du CSPMA</b><br />Zone particuliere aux spectateurs/audiences/ultras');
+    const marker5 = L.marker([33.95875975430458, -6.888674363861543]).bindPopup('<b>Montre du CSPMA</b><br />Zone particuliere aux spectateurs/audiences/ultras'+
+        '<br>'+'<img src="image/magana1.png " width=70%/>');
     const tribune = L.layerGroup([marker13, marker5]);
     layerControl.addOverlay(tribune, 'Tribune');
     /////////////////
@@ -98,7 +103,8 @@
     layerControl.addOverlay(marker9, 'Centres de formation');
     /////////////////////////
     const marker11 = L.marker([33.96334889922477, -6.886206797943342])
-        .bindPopup('<b>Piscine couverte Moulay Abdellah</b><br />Piscine couverte');
+        .bindPopup('<b>Piscine couverte Moulay Abdellah</b><br />Piscine couverte'+
+        '<br>'+'<img src="image/pisc.png " width=70%/>');
     const marker18 = L.marker([33.961101250530845, -6.887160654575862])
         .bindPopup('Piscine ouverte');
     const pis = L.layerGroup([marker18, marker11]);
@@ -120,7 +126,8 @@
     layerControl.addOverlay(par, 'Parkings');
     /////////////////////////
      const marker24 = L.marker([33.96051830022007, -6.88921752705356])
-        .bindPopup('<b>Piste de course officielle</b>');
+        .bindPopup('<b>Piste de course officielle</b>'+
+        '<br>'+'<img src="image/img-3.png "/>');
     const marker25 = L.marker([33.95703444095223, -6.890867209785203])
         .bindPopup('<b>Piste d*entrainement</b>');
     const marker26 = L.marker([33.95695680458034, -6.892727490312373])
