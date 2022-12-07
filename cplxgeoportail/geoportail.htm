@@ -1,0 +1,458 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>CSPMA</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .leaflet-container {
+            height: 400px;
+            width: 600px;
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+
+
+</head>
+<body>
+
+
+
+<div id="map" style="width: 100%; height: 100%; opacity: 100%"></div>
+<script>
+    const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+    const mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+    const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
+    const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+    const streets = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+
+
+    const map = L.map('map', {
+        center: [33.959416495468034, -6.88854627696334],
+        zoom: 15,
+        layers: [tiles, streets, satellite]
+    });
+    const baseLayers = {
+        'OpenStreetMap': tiles,
+        'Streets': streets,
+        'Satellite': satellite
+    };
+
+    const   terrain1 = L.marker([33.959808147310675, -6.889056721662617]).bindPopup('Grand terrain pour les matchs oficiels'),
+        terrain2 = L.marker([33.96206841613198, -6.89289764467176]).bindPopup('Entrainement 1');
+        terrain3 = L.marker([33.95719116981158, -6.892113334281574]).bindPopup('Entrainement 2');
+
+    const terrain = L.layerGroup([terrain1, terrain2, terrain3]);
+    const overlays = {
+        'Terrains': terrain
+    };
+
+    const layerControl = L.control.layers(baseLayers, overlays).addTo(map);
+   /////////////////////////
+    const marker1 = L.marker([33.962477749731846, -6.886910954618402])
+        .bindPopup('<b>Salle Omnisport Moulay Abdellah</b><br />Salle Couverte');
+    const marker10 = L.marker([33.96070358416139, -6.8864462258927945])
+        .bindPopup('<b>Personnal Tainer HBX Simo</b><br />Salle de GYM');
+    const salles= L.layerGroup([marker1, marker10]);
+    layerControl.addOverlay(salles, 'Salles du sport');
+    ////////////////
+    const marker3 = L.marker([33.95794596475482, -6.891919685955194])
+        .bindPopup('<b>Federation Royale Marocaine d*athletisme</b><br />Bureaux');
+    const marker8 = L.marker([33.95935482146281, -6.8914040778841485])
+        .bindPopup('<b>Comite national olympique marocain</b><br />Comite national olympique marocain');
+    const bureaux = L.layerGroup([marker8, marker3]);
+    layerControl.addOverlay(bureaux, 'Bureaux');
+    //////////////////////
+    const marker13 = L.marker([33.9607556028912, -6.888733847147259]).bindPopup('<b>Tribune</b><br />Tribune');
+    const marker5 = L.marker([33.95875975430458, -6.888674363861543]).bindPopup('<b>Montre du CSPMA</b><br />Zone particuliere aux spectateurs/audiences/ultras');
+    const tribune = L.layerGroup([marker13, marker5]);
+    layerControl.addOverlay(tribune, 'Tribune');
+    /////////////////
+    const marker6 = L.marker([33.95960169214366, -6.890059465549121])
+        .bindPopup('<b>SONARGES</b><br />Une entreprise qui a pour mission la realisation, la gestion et l*exploitation des stades');
+    layerControl.addOverlay(marker6, 'SONARGES');
+    /////////////////
+    const marker7 = L.marker([33.95884306203385, -6.887017926005972])
+        .bindPopup('<b>ESGA</b><br />Ecole d*architecture');
+    layerControl.addOverlay(marker7, 'ESGA');
+    ////////////////////////////
+    const marker9 = L.marker([33.96062740926185, -6.88703184625966])
+        .bindPopup('<b>Centre national de formation et de perfectionnement de karaté</b><br />Centre national de formation et de perfectionnement de karaté');
+    layerControl.addOverlay(marker9, 'Centres de formation');
+    /////////////////////////
+    const marker11 = L.marker([33.96334889922477, -6.886206797943342])
+        .bindPopup('<b>Piscine couverte Moulay Abdellah</b><br />Piscine couverte');
+    const marker18 = L.marker([33.961101250530845, -6.887160654575862])
+        .bindPopup('Piscine ouverte');
+    const pis = L.layerGroup([marker18, marker11]);
+    layerControl.addOverlay(pis, 'Piscines');
+    ///////////////////////////
+    const marker12 = L.marker([33.9589551618447, -6.895822544958087])
+        .bindPopup('Endroit pour passer le permis');
+    layerControl.addOverlay(marker12, 'Zones de permis');
+    //////////////////////
+    const marker20 = L.marker([33.965674017027204, -6.885541337252311])
+        .bindPopup('<b>Parking du complexe Moulay Abdellah</b>');
+    const marker21 = L.marker([33.9582766132929, -6.895231264175899])
+        .bindPopup('<b>Parking public</b>');
+    const marker22 = L.marker([33.95657832622286, -6.89339438335715])
+        .bindPopup('<b>Parking public 2</b>');
+    const marker23 = L.marker([33.958160160353565, -6.889100528303868])
+        .bindPopup('<b>Parking des cadres et des employes occupant des postes dans le CSPMA</b>');
+    const par = L.layerGroup([marker20, marker21, marker22, marker23]);
+    layerControl.addOverlay(par, 'Parkings');
+    /////////////////////////
+     const marker24 = L.marker([33.96051830022007, -6.88921752705356])
+        .bindPopup('<b>Piste de course officielle</b>');
+    const marker25 = L.marker([33.95703444095223, -6.890867209785203])
+        .bindPopup('<b>Piste d*entrainement</b>');
+    const marker26 = L.marker([33.95695680458034, -6.892727490312373])
+        .bindPopup('<b>Piste d*entrainement 2</b>');
+    const piste = L.layerGroup([marker24, marker25, marker26]);
+    layerControl.addOverlay(piste, 'Pistes de courses');
+    /////////////////////////
+    var geojsonFeature = {
+"type": "FeatureCollection",
+"name": "routes",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm_id": 4724263, "name": null, "ref": "RN1", "type": "trunk", "oneway": 0, "bridge": 0, "maxspeed": 80 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.890695304824606, 33.954476193884176 ], [ -6.8902191, 33.9550268 ], [ -6.8900179, 33.9552641 ], [ -6.8899354, 33.9553614 ], [ -6.8896884, 33.9556527 ], [ -6.8889762, 33.9564928 ], [ -6.8886765, 33.9568432 ], [ -6.8886128, 33.9569199 ], [ -6.8885357, 33.9570095 ], [ -6.8884487, 33.9571283 ], [ -6.887903, 33.9577601 ], [ -6.887663, 33.958039 ], [ -6.8874688, 33.9582648 ], [ -6.8869539, 33.9589244 ], [ -6.8868764, 33.9590237 ], [ -6.8868208, 33.9591059 ], [ -6.8867614, 33.9591998 ], [ -6.8866672, 33.9593747 ], [ -6.8865475, 33.9596072 ], [ -6.8863758, 33.9599361 ], [ -6.8860821, 33.9605032 ], [ -6.8858173, 33.9609917 ], [ -6.8856389, 33.9613015 ], [ -6.8855403, 33.9614673 ], [ -6.8853675, 33.9617971 ], [ -6.8852191, 33.9620718 ], [ -6.885076, 33.9623601 ], [ -6.8849985, 33.9625162 ], [ -6.884855, 33.9628009 ], [ -6.8847531, 33.9629878 ], [ -6.8846633, 33.9631469 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 97671293, "name": "Avenue Hassan II شارع الحسن الثان", "ref": "RN1", "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": 80 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.885741141938976, 33.967673730016436 ], [ -6.8858256, 33.9676571 ], [ -6.8858478, 33.9676527 ], [ -6.8860437, 33.9676548 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 141116426, "name": "الطريق السيار الرباط - الد", "ref": "A1", "type": "motorway", "oneway": 1, "bridge": 0, "maxspeed": 120 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8865613, 33.9672656 ], [ -6.8875054, 33.9669364 ], [ -6.8877844, 33.966843 ], [ -6.8881921, 33.9667451 ], [ -6.8890289, 33.966576 ], [ -6.8895261, 33.9664782 ], [ -6.889801, 33.9664248 ], [ -6.8901216, 33.9663636 ], [ -6.8902905, 33.966328 ], [ -6.8905708, 33.966278 ], [ -6.89089, 33.966219 ], [ -6.8913929, 33.9661222 ], [ -6.8920943, 33.9659966 ], [ -6.892958, 33.9658353 ], [ -6.8940926, 33.9656328 ], [ -6.8951172, 33.9654482 ], [ -6.8959165, 33.9652903 ], [ -6.8963349, 33.9652102 ], [ -6.8970376, 33.9650656 ], [ -6.8974742, 33.9649791 ], [ -6.8983063, 33.9648298 ], [ -6.8987918, 33.9647341 ], [ -6.8994597, 33.9645873 ], [ -6.8999854, 33.9644538 ], [ -6.9005701, 33.9642803 ], [ -6.9009456, 33.9641557 ], [ -6.9013292, 33.9640245 ], [ -6.9017851, 33.9638532 ], [ -6.902108767252602, 33.963716609879178 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 181033334, "name": null, "ref": null, "type": "residential", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8970603, 33.9653417 ], [ -6.897067028003153, 33.965350532660551 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 249631265, "name": null, "ref": null, "type": "service", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.891819884607339, 33.954990593361416 ], [ -6.8918117, 33.9549988 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 261879979, "name": null, "ref": null, "type": "service", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.885072015548916, 33.961709723329385 ], [ -6.8850867, 33.9617784 ], [ -6.8851054, 33.9618438 ], [ -6.8851481, 33.9619295 ], [ -6.8852191, 33.9620718 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 279311857, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8870113, 33.9597077 ], [ -6.8867476, 33.960207 ], [ -6.8866714, 33.9603711 ], [ -6.8865855, 33.960543 ], [ -6.886536, 33.9606391 ], [ -6.8865269, 33.9606509 ], [ -6.8865196, 33.9606563 ], [ -6.8865112, 33.9606581 ], [ -6.8864945, 33.9606581 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 279311858, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8864945, 33.9606581 ], [ -6.8860821, 33.9605032 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 285140616, "name": null, "ref": null, "type": "unclassified", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8972921, 33.9585927 ], [ -6.8976539, 33.958841 ], [ -6.898248, 33.9592331 ], [ -6.8991264, 33.959809 ], [ -6.8998539, 33.960271 ], [ -6.9003451, 33.9605885 ], [ -6.900733, 33.9608544 ], [ -6.9011381, 33.9611447 ], [ -6.9012829, 33.9612798 ], [ -6.9013929, 33.9613955 ], [ -6.901476, 33.9615184 ], [ -6.9015478, 33.961653 ], [ -6.9016012, 33.9617842 ], [ -6.9016436, 33.9619229 ], [ -6.9016775, 33.9620503 ], [ -6.9016916, 33.9621801 ], [ -6.9016888, 33.9623052 ], [ -6.9016829, 33.9624411 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 297218450, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8930339, 33.9615818 ], [ -6.89282, 33.9613783 ], [ -6.8926371, 33.9611672 ], [ -6.8924843, 33.9610031 ], [ -6.8923538, 33.9608594 ], [ -6.8922754, 33.9607765 ], [ -6.8922274, 33.9607114 ], [ -6.8922023, 33.9606664 ], [ -6.8921792, 33.9606116 ], [ -6.8921644, 33.9605529 ], [ -6.8921527, 33.9604481 ], [ -6.8921338, 33.9603179 ], [ -6.892096, 33.9602717 ], [ -6.8920736, 33.9602233 ], [ -6.8920427, 33.9601795 ], [ -6.8919439, 33.9601333 ], [ -6.8917379, 33.9600134 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 331780062, "name": null, "ref": "RN1", "type": "tertiary", "oneway": 1, "bridge": 0, "maxspeed": 60 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8882789, 33.9664949 ], [ -6.8881515, 33.9664593 ], [ -6.8880777, 33.9664331 ], [ -6.8880033, 33.9663959 ], [ -6.8876882, 33.9660739 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 331780064, "name": null, "ref": "RN1", "type": "tertiary", "oneway": 0, "bridge": 0, "maxspeed": 60 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8876882, 33.9660739 ], [ -6.8875994, 33.9659792 ], [ -6.8875584, 33.9659355 ], [ -6.8875381, 33.9659105 ], [ -6.8875141, 33.9658876 ], [ -6.8874891, 33.9658636 ], [ -6.8874586, 33.9658357 ], [ -6.8874065, 33.9657951 ], [ -6.8871098, 33.9655952 ], [ -6.8868296, 33.9654064 ], [ -6.8866712, 33.9652997 ], [ -6.8866016, 33.9652527 ], [ -6.8862757, 33.9650332 ], [ -6.8861995, 33.9649819 ], [ -6.8851819, 33.9642962 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408839277, "name": null, "ref": null, "type": "unclassified", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8972921, 33.9585927 ], [ -6.8971781, 33.9585179 ], [ -6.896873, 33.9583265 ], [ -6.8966772, 33.9581981 ], [ -6.8962504, 33.9579267 ], [ -6.8957066, 33.9575868 ], [ -6.8953861, 33.957376 ], [ -6.8951339, 33.9571965 ], [ -6.8950199, 33.9571191 ], [ -6.8948396, 33.9570034 ], [ -6.8947685, 33.9569583 ], [ -6.8944238, 33.9567236 ], [ -6.8941194, 33.9565262 ], [ -6.8936735, 33.9562363 ], [ -6.8936002, 33.9561879 ], [ -6.8934404, 33.9560825 ], [ -6.8933476, 33.9560213 ], [ -6.8928051, 33.9556685 ], [ -6.8925909, 33.9555221 ], [ -6.8921131, 33.9552041 ], [ -6.89188, 33.9550397 ], [ -6.8918251, 33.9550074 ], [ -6.8918117, 33.9549988 ], [ -6.8917255, 33.9549465 ], [ -6.8916531, 33.9549073 ], [ -6.8915683, 33.9548637 ], [ -6.8915046, 33.9548389 ], [ -6.8914545, 33.9548221 ], [ -6.8914038, 33.9548076 ], [ -6.8913235, 33.954787 ], [ -6.891267, 33.9547759 ], [ -6.8912006, 33.9547669 ], [ -6.8911549, 33.9547624 ], [ -6.891118, 33.9547627 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408842327, "name": null, "ref": null, "type": "track", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.899965412780642, 33.960155953008076 ], [ -6.8998539, 33.960271 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408842816, "name": null, "ref": null, "type": "unclassified", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.897259132084886, 33.958439807314271 ], [ -6.8971781, 33.9585179 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408842817, "name": null, "ref": null, "type": "unclassified", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8972921, 33.9585927 ], [ -6.897371814598339, 33.958511263172689 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408845001, "name": null, "ref": null, "type": "service", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.89188, 33.9550397 ], [ -6.89188670069341, 33.95503296374028 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408845010, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8918251, 33.9550074 ], [ -6.8917914, 33.955099 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408846311, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8925306, 33.9555755 ], [ -6.8925909, 33.9555221 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408846312, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8933476, 33.9560213 ], [ -6.8932962, 33.9560686 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408847764, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8866016, 33.9652527 ], [ -6.8864968, 33.9654473 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408849976, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8874974, 33.965695 ], [ -6.8874142, 33.9656454 ], [ -6.8873468, 33.9656137 ], [ -6.8872757, 33.9656011 ], [ -6.8872224, 33.965592 ], [ -6.887172, 33.9655903 ], [ -6.8871098, 33.9655952 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408849978, "name": null, "ref": null, "type": "service", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8859921, 33.9651608 ], [ -6.8859896, 33.9651719 ], [ -6.8859919, 33.9651854 ], [ -6.8860011, 33.9652025 ], [ -6.886021, 33.9652175 ], [ -6.8860347, 33.9652207 ], [ -6.8860662, 33.9652202 ], [ -6.8860961, 33.9652048 ], [ -6.8861284, 33.9651754 ], [ -6.8862757, 33.9650332 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408849979, "name": null, "ref": null, "type": "service", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8861995, 33.9649819 ], [ -6.8859921, 33.9651608 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408849980, "name": null, "ref": "RN1", "type": "tertiary", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8851819, 33.9642962 ], [ -6.8851194, 33.9642402 ], [ -6.8850718, 33.9641865 ], [ -6.8850241, 33.9641161 ], [ -6.885006, 33.9640894 ], [ -6.8849563, 33.9640056 ], [ -6.88479, 33.9637025 ], [ -6.8847048, 33.9635573 ], [ -6.8846619, 33.9634839 ], [ -6.8846485, 33.96345 ], [ -6.8846364, 33.9634177 ], [ -6.8846331, 33.9633793 ], [ -6.8846351, 33.9633282 ], [ -6.8846445, 33.9632603 ], [ -6.8846505, 33.9632147 ], [ -6.8846633, 33.9631469 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408850846, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.894698, 33.9570254 ], [ -6.8947685, 33.9569583 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408850849, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8950804, 33.9572523 ], [ -6.8951339, 33.9571965 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408851262, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8897664, 33.9581569 ], [ -6.889437, 33.9577794 ], [ -6.8890562, 33.9574194 ], [ -6.8890225, 33.9573866 ], [ -6.888984, 33.9573301 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 408851263, "name": null, "ref": null, "type": "service", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8909892, 33.9605652 ], [ -6.890898, 33.9600246 ], [ -6.8908142, 33.9597162 ], [ -6.8906838, 33.9593088 ], [ -6.8906184, 33.9591085 ], [ -6.8904944, 33.9588535 ], [ -6.8904203, 33.9587045 ], [ -6.8903355, 33.9585629 ], [ -6.8902604, 33.9584392 ], [ -6.8902193, 33.9583779 ], [ -6.8901722, 33.9583101 ], [ -6.8901125, 33.9582412 ], [ -6.889974, 33.9580432 ], [ -6.889852, 33.957883 ], [ -6.8897182, 33.9577284 ], [ -6.889509, 33.9575026 ], [ -6.8893273, 33.957331 ], [ -6.8892069, 33.9572208 ], [ -6.8891482, 33.9571638 ], [ -6.8890725, 33.9570949 ], [ -6.8890272, 33.9570582 ], [ -6.8889695, 33.9570151 ], [ -6.8888686, 33.9569569 ], [ -6.8887936, 33.9569133 ], [ -6.8886765, 33.9568432 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 409940475, "name": "الطريق السيار الرباط - الد", "ref": "A1", "type": "motorway", "oneway": 1, "bridge": 0, "maxspeed": 120 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.902093062390465, 33.963430045785934 ], [ -6.9018602, 33.9635306 ], [ -6.9012447, 33.963772 ], [ -6.9008558, 33.9639088 ], [ -6.9002067, 33.964119 ], [ -6.8998861, 33.9642169 ], [ -6.8995454, 33.964299 ], [ -6.899007, 33.9644138 ], [ -6.8973065, 33.964748 ], [ -6.8961699, 33.9649799 ], [ -6.895545, 33.965099 ], [ -6.8945941, 33.9652814 ], [ -6.8939745, 33.9653993 ], [ -6.8936031, 33.9654671 ], [ -6.8927541, 33.9656206 ], [ -6.8908055, 33.9659877 ], [ -6.8901899, 33.9660956 ], [ -6.889797, 33.9661667 ], [ -6.8895328, 33.9662217 ], [ -6.888809, 33.9663847 ], [ -6.888412, 33.9664915 ], [ -6.8880419, 33.9666205 ], [ -6.8874679, 33.9668608 ], [ -6.8871138, 33.9669898 ], [ -6.8865093, 33.9672065 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 437377532, "name": null, "ref": null, "type": "unclassified", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.891118, 33.9547627 ], [ -6.8910439, 33.9547467 ], [ -6.8909911, 33.9547314 ], [ -6.8909287, 33.954706 ], [ -6.8908912, 33.9546881 ], [ -6.8908568, 33.954664 ], [ -6.8908146, 33.9546199 ], [ -6.8907893, 33.954576 ], [ -6.8907748, 33.9545465 ], [ -6.8907585, 33.954504 ], [ -6.890751, 33.9544732 ], [ -6.890750643437823, 33.954471603648237 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 437377533, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8900089, 33.9582624 ], [ -6.8901125, 33.9582412 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 437377539, "name": null, "ref": null, "type": "service", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8886128, 33.9569199 ], [ -6.8886577, 33.9569494 ], [ -6.8887409, 33.9569939 ], [ -6.888818, 33.9570429 ], [ -6.8889199, 33.957111 ], [ -6.8890787, 33.9572474 ], [ -6.8891767, 33.9573382 ], [ -6.8893427, 33.9574917 ], [ -6.889511, 33.9576548 ], [ -6.8895921, 33.9577459 ], [ -6.8897625, 33.9579322 ], [ -6.8898818, 33.9580866 ], [ -6.8900089, 33.9582624 ], [ -6.8900265, 33.9582886 ], [ -6.8900625, 33.9583382 ], [ -6.8901242, 33.9584378 ], [ -6.8901804, 33.9585407 ], [ -6.8902925, 33.9587392 ], [ -6.8904541, 33.9590818 ], [ -6.8905762, 33.9593822 ], [ -6.890712, 33.9598216 ], [ -6.8907747, 33.9600535 ], [ -6.8908659, 33.9606514 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 462661528, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8902549, 33.9607857 ], [ -6.8900411, 33.9609389 ], [ -6.8898278, 33.961049 ], [ -6.889618, 33.9611291 ], [ -6.889447, 33.9611708 ], [ -6.889276, 33.9611953 ], [ -6.8890809, 33.9612067 ], [ -6.8888535, 33.9611939 ], [ -6.8886477, 33.9611558 ], [ -6.8882937, 33.9610722 ], [ -6.8883677, 33.9613649 ], [ -6.8883684, 33.961531 ], [ -6.88836, 33.9617331 ], [ -6.8883459, 33.9618588 ], [ -6.8883097, 33.9620245 ], [ -6.888236, 33.9622359 ], [ -6.8880656, 33.9625585 ], [ -6.8877404, 33.9631806 ], [ -6.8876603, 33.963334 ], [ -6.8875895, 33.9634694 ], [ -6.8873441, 33.9639444 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 462661538, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8929583, 33.9589038 ], [ -6.8922438, 33.958737 ], [ -6.8913889, 33.958554 ], [ -6.8912037, 33.958527 ], [ -6.8908927, 33.9584817 ], [ -6.8902604, 33.9584392 ], [ -6.8901702, 33.9584356 ], [ -6.8901242, 33.9584378 ], [ -6.889911, 33.9584289 ], [ -6.8895315, 33.95842 ], [ -6.8890084, 33.9584139 ], [ -6.8887067, 33.9584317 ], [ -6.8885531, 33.9584717 ], [ -6.8883875, 33.9585268 ], [ -6.8881629, 33.9586441 ], [ -6.8879811, 33.9587837 ], [ -6.8877639, 33.9590168 ], [ -6.8876848, 33.9592654 ], [ -6.8876492, 33.9595101 ], [ -6.8876834, 33.9598132 ], [ -6.8877465, 33.9600535 ], [ -6.8878745, 33.9603538 ], [ -6.8879597, 33.9605229 ], [ -6.8881588, 33.9608338 ], [ -6.8882937, 33.9610722 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 462661542, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8874916, 33.9639822 ], [ -6.8880871, 33.9628288 ], [ -6.8883597, 33.9622973 ], [ -6.8884324, 33.9621655 ], [ -6.8885008, 33.9620582 ], [ -6.8885454, 33.9620109 ], [ -6.8886074, 33.9619589 ], [ -6.8887389, 33.9618788 ], [ -6.8888931, 33.9617987 ], [ -6.8891566, 33.9616541 ], [ -6.8898466, 33.9612904 ], [ -6.8902302, 33.9610718 ], [ -6.8906835, 33.9607735 ], [ -6.8908659, 33.9606514 ], [ -6.8909892, 33.9605652 ], [ -6.8917379, 33.9600134 ], [ -6.8922149, 33.9596261 ], [ -6.8929583, 33.9589038 ], [ -6.8933107, 33.9585351 ], [ -6.894698, 33.9570254 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 508257064, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8936002, 33.9561879 ], [ -6.893637681459916, 33.956143320883605 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 508257091, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8951339, 33.9571965 ], [ -6.895189025000445, 33.957127081193782 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 508258853, "name": null, "ref": null, "type": "unclassified", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8902191, 33.9550268 ], [ -6.8903217, 33.9549898 ], [ -6.8903681, 33.9549723 ], [ -6.8904176, 33.9549513 ], [ -6.8904793, 33.9549232 ], [ -6.8905723, 33.9548844 ], [ -6.8906399, 33.9548584 ], [ -6.890718, 33.9548311 ], [ -6.890785, 33.954813 ], [ -6.8908721, 33.9547971 ], [ -6.8909946, 33.95478 ], [ -6.891118, 33.9547627 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 611313266, "name": null, "ref": null, "type": "unclassified", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.902090506388057, 33.963383406821144 ], [ -6.9020346, 33.963391 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 611313269, "name": null, "ref": null, "type": "unclassified", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.9016356, 33.9630454 ], [ -6.9016379, 33.9629912 ], [ -6.9016416, 33.9629465 ], [ -6.9016462, 33.9628951 ], [ -6.9016517, 33.9628349 ], [ -6.9016604, 33.9627503 ], [ -6.9016681, 33.9626737 ], [ -6.9016725, 33.9626013 ], [ -6.9016829, 33.9624411 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 611313270, "name": null, "ref": null, "type": "motorway_link", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.9016829, 33.9624411 ], [ -6.9016415, 33.9625692 ], [ -6.9015987, 33.9627147 ], [ -6.9015561, 33.9628321 ], [ -6.9015028, 33.9629611 ], [ -6.9014489, 33.963064 ], [ -6.9014049, 33.9631383 ], [ -6.901358, 33.9632017 ], [ -6.9012889, 33.9632823 ], [ -6.9011434, 33.9634461 ], [ -6.9010562, 33.9635201 ], [ -6.9009724, 33.9635851 ], [ -6.900838, 33.9636669 ], [ -6.9005339, 33.9638354 ], [ -6.900157, 33.9640401 ], [ -6.8999998, 33.9641137 ], [ -6.8995454, 33.964299 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 611313273, "name": null, "ref": null, "type": "unclassified", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.9020346, 33.963391 ], [ -6.9019226, 33.9633618 ], [ -6.9018163, 33.9633118 ], [ -6.9017446, 33.9632662 ], [ -6.901696, 33.9632245 ], [ -6.9016574, 33.9631463 ], [ -6.9016356, 33.9630454 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 611316823, "name": "شارع الفتح", "ref": null, "type": "tertiary", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.898288360481459, 33.965062295550254 ], [ -6.8975674, 33.9652074 ], [ -6.8970603, 33.9653417 ], [ -6.8969085, 33.9653848 ], [ -6.896835047616898, 33.965405280534178 ] ], [ [ -6.896516329391374, 33.965480498725753 ], [ -6.896472937413255, 33.965489519626146 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 611629131, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8868296, 33.9654064 ], [ -6.8874916, 33.9639822 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 611629140, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8873441, 33.9639444 ], [ -6.8866712, 33.9652997 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 725390626, "name": null, "ref": null, "type": "service", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8855403, 33.9614673 ], [ -6.8852835, 33.9615023 ], [ -6.8851984, 33.9615184 ], [ -6.885171379887091, 33.961525229259308 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 740755032, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.888984, 33.9573301 ], [ -6.8889286, 33.9572798 ], [ -6.8888649, 33.9572303 ], [ -6.8887644, 33.9571608 ], [ -6.8885357, 33.9570095 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 740755033, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8895608, 33.9581949 ], [ -6.8888599, 33.9574831 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 740755034, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8893432, 33.9582132 ], [ -6.8887426, 33.9576131 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 740755035, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8890877, 33.9582032 ], [ -6.8886283, 33.9577401 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 740755036, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8888502, 33.9582098 ], [ -6.8885028, 33.9578797 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 740755037, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8886126, 33.9582098 ], [ -6.888382, 33.9580142 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 740755038, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.88826, 33.9581648 ], [ -6.888405, 33.9582711 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 740755039, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.888984, 33.9573301 ], [ -6.8889161, 33.9574201 ], [ -6.8888599, 33.9574831 ], [ -6.8887426, 33.9576131 ], [ -6.8886283, 33.9577401 ], [ -6.8885028, 33.9578797 ], [ -6.888382, 33.9580142 ], [ -6.8882646, 33.9581372 ], [ -6.8882558, 33.9581508 ], [ -6.88826, 33.9581648 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 744394500, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8862753, 33.9621924 ], [ -6.8863128, 33.9621142 ], [ -6.8864149, 33.9619379 ], [ -6.8865284, 33.9617655 ], [ -6.8866519, 33.9616155 ], [ -6.8867243, 33.9615731 ], [ -6.8868095, 33.961566 ], [ -6.8869244, 33.961596 ], [ -6.8880037, 33.9620021 ], [ -6.8880676, 33.9620516 ], [ -6.8880889, 33.9621293 ], [ -6.8881421, 33.9621893 ], [ -6.888236, 33.9622359 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 744394501, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8853675, 33.9617971 ], [ -6.8857982, 33.9619439 ], [ -6.8861005, 33.9620763 ], [ -6.8862219, 33.9621517 ], [ -6.8862753, 33.9621924 ], [ -6.8862559, 33.9623447 ], [ -6.8862325, 33.96244 ], [ -6.8862049, 33.9625248 ], [ -6.8862176, 33.9625919 ], [ -6.8862559, 33.9626272 ], [ -6.8863241, 33.9626678 ], [ -6.8875993, 33.9631304 ], [ -6.8877404, 33.9631806 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 744486623, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8914802, 33.9578385 ], [ -6.891592, 33.9581811 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 744486624, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8913035, 33.9582429 ], [ -6.891592, 33.9581811 ], [ -6.8921912, 33.9580426 ], [ -6.8922188, 33.9580261 ], [ -6.8922338, 33.9580079 ], [ -6.8922408, 33.957984 ], [ -6.8922381, 33.9579533 ], [ -6.8922115, 33.9578659 ], [ -6.8921848, 33.9577794 ], [ -6.8921685, 33.9577317 ], [ -6.8921561, 33.9577123 ], [ -6.8921335, 33.9576987 ], [ -6.892105, 33.9576955 ], [ -6.892072, 33.9577008 ], [ -6.8914802, 33.9578385 ], [ -6.8912716, 33.9578844 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 744486625, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8899197, 33.9557761 ], [ -6.890503, 33.9561363 ], [ -6.8906691, 33.9562369 ], [ -6.8907117, 33.9562846 ], [ -6.8907436, 33.956357 ], [ -6.8910629, 33.9572911 ], [ -6.8912247, 33.9577873 ], [ -6.8912716, 33.9578844 ], [ -6.8913014, 33.9579921 ], [ -6.8913163, 33.9580928 ], [ -6.8913035, 33.9582429 ], [ -6.8912545, 33.9583665 ], [ -6.8912037, 33.958527 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 744486626, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8896884, 33.9556527 ], [ -6.8899197, 33.9557761 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 744486627, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8899354, 33.9553614 ], [ -6.8901156, 33.9554688 ], [ -6.8901305, 33.9554953 ], [ -6.8901369, 33.9555288 ], [ -6.8901262, 33.9555659 ], [ -6.8899197, 33.9557761 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 826932634, "name": "Avenue Hassan II شارع الحسن الثان", "ref": "RN1", "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": 80 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.885768, 33.9673476 ], [ -6.8857026, 33.967384 ], [ -6.8856779, 33.9673979 ], [ -6.885644, 33.9674169 ], [ -6.8855581, 33.9674569 ], [ -6.885481320405578, 33.967493102456324 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928450, "name": null, "ref": null, "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8860494, 33.9671249 ], [ -6.8859494, 33.9671483 ], [ -6.8858636, 33.967197 ], [ -6.885801, 33.9672658 ], [ -6.885768, 33.9673476 ], [ -6.8857681, 33.9674327 ], [ -6.8858003, 33.9675134 ], [ -6.8858615, 33.9675816 ], [ -6.8859455, 33.9676304 ], [ -6.8860437, 33.9676548 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928451, "name": null, "ref": "RN1", "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": 80 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8844625, 33.9634608 ], [ -6.8842462, 33.9637987 ], [ -6.8840802, 33.964076 ], [ -6.8839059, 33.9644048 ], [ -6.88376, 33.964697 ], [ -6.883686, 33.9648453 ], [ -6.883488340940881, 33.965256982609048 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928453, "name": null, "ref": "RN1", "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8860494, 33.9671249 ], [ -6.8858854, 33.9671076 ], [ -6.8857767, 33.9670721 ], [ -6.8856681, 33.967012 ], [ -6.8856153, 33.966986 ], [ -6.8854693, 33.9668842 ], [ -6.8850972, 33.9666249 ], [ -6.8843314, 33.9660911 ], [ -6.8840132, 33.9658019 ], [ -6.8838523, 33.9655972 ], [ -6.8837611, 33.9654281 ], [ -6.8837289, 33.9652769 ], [ -6.8837235, 33.965139 ], [ -6.8837453, 33.9649905 ], [ -6.8837832, 33.9648822 ], [ -6.8838308, 33.9647786 ], [ -6.8841956, 33.9640534 ], [ -6.8844625, 33.9634608 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928454, "name": null, "ref": null, "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.883553111066037, 33.965804913189928 ], [ -6.8836365, 33.9658126 ], [ -6.8838189, 33.9658616 ], [ -6.8839959, 33.9659461 ], [ -6.8853325, 33.9668841 ], [ -6.8855235, 33.9670327 ], [ -6.8855313, 33.9670387 ], [ -6.8856198, 33.967121 ], [ -6.8857083, 33.96723 ], [ -6.885768, 33.9673476 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928457, "name": null, "ref": "RN1", "type": "trunk", "oneway": 0, "bridge": 0, "maxspeed": 80 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8846633, 33.9631469 ], [ -6.8845217, 33.9633682 ], [ -6.8844625, 33.9634608 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928458, "name": "الطريق السيار الرباط - الد", "ref": null, "type": "motorway", "oneway": 1, "bridge": 0, "maxspeed": 120 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8856493, 33.9675148 ], [ -6.885566848611206, 33.967552561543116 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928459, "name": "الطريق السيار الرباط - الد", "ref": null, "type": "motorway", "oneway": 1, "bridge": 0, "maxspeed": 120 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8865093, 33.9672065 ], [ -6.8856493, 33.9675148 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928460, "name": "الطريق السيار الرباط - الد", "ref": null, "type": "motorway", "oneway": 1, "bridge": 0, "maxspeed": 120 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.885640485820653, 33.967603754026285 ], [ -6.8856976, 33.967577 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928461, "name": "الطريق السيار الرباط - الد", "ref": null, "type": "motorway", "oneway": 1, "bridge": 0, "maxspeed": 120 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8856976, 33.967577 ], [ -6.8865613, 33.9672656 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928462, "name": null, "ref": null, "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.888809, 33.9663847 ], [ -6.8884509, 33.9664481 ], [ -6.8882789, 33.9664949 ], [ -6.8877227, 33.9666683 ], [ -6.8874983, 33.9667483 ], [ -6.8873177, 33.9668207 ], [ -6.8869555, 33.9669457 ], [ -6.8865827, 33.9670743 ], [ -6.8864495, 33.9671178 ], [ -6.8864057, 33.9671321 ], [ -6.8863038, 33.9671499 ], [ -6.8861967, 33.9671433 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928463, "name": null, "ref": null, "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8863885, 33.967481 ], [ -6.886491, 33.9673978 ], [ -6.8865833, 33.9673483 ], [ -6.8865881, 33.9673457 ], [ -6.8866847, 33.9673057 ], [ -6.8876985, 33.9669453 ], [ -6.8879238, 33.9668785 ], [ -6.8881706, 33.9668074 ], [ -6.888584, 33.9667001 ], [ -6.8890289, 33.966576 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928464, "name": null, "ref": null, "type": "trunk_link", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.88376, 33.964697 ], [ -6.8836398, 33.9648412 ], [ -6.8835089, 33.9650389 ], [ -6.883467918247104, 33.965084214400903 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928465, "name": null, "ref": null, "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8843314, 33.9660911 ], [ -6.8840186, 33.9658731 ], [ -6.8838415, 33.9657885 ], [ -6.8836591, 33.9657396 ], [ -6.88354413779776, 33.96572900275919 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 871928466, "name": null, "ref": null, "type": "trunk_link", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8869555, 33.9669457 ], [ -6.8866364, 33.966992 ], [ -6.8864019, 33.9670034 ], [ -6.8863628, 33.9670053 ], [ -6.8860946, 33.9669787 ], [ -6.885821, 33.9669297 ], [ -6.8856965, 33.966895 ], [ -6.8856827, 33.9668903 ], [ -6.8855903, 33.9668585 ], [ -6.885404, 33.9667745 ], [ -6.8852445, 33.9666861 ], [ -6.8850972, 33.9666249 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 875778922, "name": null, "ref": null, "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8860437, 33.9676548 ], [ -6.8861521, 33.9676514 ], [ -6.886253, 33.9676183 ], [ -6.8863349, 33.9675593 ], [ -6.8863885, 33.967481 ], [ -6.8864077, 33.9673925 ], [ -6.8863904, 33.9673037 ], [ -6.8863385, 33.9672247 ], [ -6.8862579, 33.9671645 ], [ -6.8861967, 33.9671433 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 875778923, "name": null, "ref": null, "type": "trunk", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8861967, 33.9671433 ], [ -6.8861519, 33.9671306 ], [ -6.8861098, 33.9671248 ], [ -6.8860494, 33.9671249 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 880874994, "name": null, "ref": null, "type": "trunk_link", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8853325, 33.9668841 ], [ -6.8854089, 33.967022 ], [ -6.8854202, 33.9670644 ], [ -6.885454, 33.9671918 ], [ -6.8854585, 33.9672089 ], [ -6.885417, 33.9673913 ], [ -6.885388961032906, 33.967428894351933 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 921256672, "name": null, "ref": "RN1", "type": "tertiary", "oneway": 1, "bridge": 0, "maxspeed": 60 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8876882, 33.9660739 ], [ -6.8876737, 33.9663877 ], [ -6.8876594, 33.9664575 ], [ -6.8876265, 33.9665378 ], [ -6.8874983, 33.9667483 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 921256673, "name": null, "ref": null, "type": "trunk_link", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8876985, 33.9669453 ], [ -6.8878698, 33.9670032 ], [ -6.8879449, 33.9670521 ], [ -6.887958601454176, 33.967078002749133 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 921256674, "name": null, "ref": null, "type": "trunk_link", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.888178570653882, 33.966987382388751 ], [ -6.8881803, 33.9669837 ], [ -6.8882346, 33.9669381 ], [ -6.8883218, 33.9668853 ], [ -6.8884331, 33.9668152 ], [ -6.888584, 33.9667001 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576708, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8858371, 33.9676721 ], [ -6.8858256, 33.9676571 ], [ -6.8857808, 33.9675831 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576709, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8857808, 33.9675831 ], [ -6.8857004, 33.9674341 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576710, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8857004, 33.9674341 ], [ -6.8856779, 33.9673979 ], [ -6.8856507, 33.967354 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576711, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8856507, 33.967354 ], [ -6.8856051, 33.9672839 ], [ -6.8855676, 33.9672316 ], [ -6.8855394, 33.9672105 ], [ -6.8855045, 33.9671916 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576712, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8855045, 33.9671916 ], [ -6.885454, 33.9671918 ], [ -6.8854268, 33.9671916 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576713, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8865955, 33.9673701 ], [ -6.8865833, 33.9673483 ], [ -6.886553, 33.9672942 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576714, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8864495, 33.9671178 ], [ -6.8864222, 33.9670662 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576715, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8864222, 33.9670662 ], [ -6.8864031, 33.9670195 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576716, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8864031, 33.9670195 ], [ -6.8864019, 33.9670034 ], [ -6.8863978, 33.9669327 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576717, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.886553, 33.9672942 ], [ -6.8864495, 33.9671178 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576718, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8857084, 33.9668315 ], [ -6.8856827, 33.9668903 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576719, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8856827, 33.9668903 ], [ -6.8856575, 33.9669271 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576720, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8856575, 33.9669271 ], [ -6.8856153, 33.966986 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576721, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8856153, 33.966986 ], [ -6.8856054, 33.9669949 ], [ -6.8855918, 33.9670072 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576722, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8855918, 33.9670072 ], [ -6.8855235, 33.9670327 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576723, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8855235, 33.9670327 ], [ -6.8854697, 33.9670506 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1033576724, "name": null, "ref": null, "type": "footway", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8854697, 33.9670506 ], [ -6.8854202, 33.9670644 ], [ -6.8854013, 33.9670695 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1057502746, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8921338, 33.9603179 ], [ -6.8919884, 33.9603727 ], [ -6.8917564, 33.960504 ], [ -6.891401, 33.9607354 ], [ -6.8911448, 33.9610123 ], [ -6.8908297, 33.9612848 ], [ -6.8905869, 33.961524 ], [ -6.8903495, 33.9618088 ], [ -6.8900934, 33.9620857 ], [ -6.8899432, 33.9623126 ], [ -6.8898989, 33.9625218 ], [ -6.8898667, 33.9627064 ], [ -6.8897796, 33.9629011 ], [ -6.8896267, 33.9630979 ], [ -6.8895234, 33.9632036 ], [ -6.8893464, 33.9633704 ], [ -6.8892699, 33.9634772 ], [ -6.8892686, 33.9635351 ], [ -6.8892954, 33.9635829 ], [ -6.8893451, 33.9636085 ], [ -6.8894349, 33.9636207 ], [ -6.8895543, 33.9636152 ], [ -6.8905708, 33.9634161 ], [ -6.8916786, 33.9632081 ], [ -6.8934368, 33.9628788 ], [ -6.8947618, 33.9626296 ], [ -6.8948221, 33.9626374 ], [ -6.8948691, 33.9626652 ], [ -6.8949401, 33.9627843 ], [ -6.8950072, 33.9629767 ], [ -6.8950193, 33.9631046 ], [ -6.8950327, 33.9633093 ], [ -6.8950662, 33.9633994 ], [ -6.8951198, 33.9634828 ], [ -6.895211, 33.9635695 ], [ -6.8956764, 33.9638587 ], [ -6.8959969, 33.9639944 ], [ -6.8962169, 33.9640623 ], [ -6.8964328, 33.964079 ], [ -6.8965924, 33.9640567 ], [ -6.8974628, 33.9639055 ], [ -6.8984042, 33.9637253 ], [ -6.8985558, 33.9636608 ], [ -6.8990546, 33.9634105 ], [ -6.8995053, 33.9631914 ], [ -6.900086, 33.9629077 ], [ -6.9007887, 33.9625662 ], [ -6.9012514, 33.9623327 ], [ -6.9013104, 33.9622871 ], [ -6.9013251, 33.9622314 ], [ -6.9013077, 33.9621914 ], [ -6.89987, 33.9612514 ], [ -6.8997976, 33.9612181 ], [ -6.8997198, 33.9612425 ], [ -6.8991351, 33.9619044 ], [ -6.8990707, 33.9619422 ], [ -6.8989903, 33.9619311 ], [ -6.8987516, 33.9617376 ], [ -6.8977672, 33.9610702 ], [ -6.8961418, 33.9600045 ], [ -6.8959621, 33.9598889 ], [ -6.8958333, 33.959831 ], [ -6.8956777, 33.9597776 ], [ -6.8954873, 33.9597242 ], [ -6.8953666, 33.9596575 ], [ -6.8951628, 33.9594773 ], [ -6.8947175, 33.9592037 ], [ -6.8943447, 33.9590079 ], [ -6.8941408, 33.9589033 ], [ -6.8940389, 33.9588855 ], [ -6.8938941, 33.9589078 ], [ -6.8936098, 33.9589434 ], [ -6.8935481, 33.9589701 ], [ -6.8934797, 33.959029 ], [ -6.8930478, 33.9595396 ], [ -6.8928628, 33.9596753 ], [ -6.8925677, 33.9599712 ], [ -6.8924598, 33.960083 ], [ -6.8923853, 33.9602103 ], [ -6.8923223, 33.9602815 ], [ -6.8922552, 33.960336 ], [ -6.8921962, 33.9603405 ], [ -6.8921338, 33.9603179 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1059844428, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8906835, 33.9607735 ], [ -6.8904716, 33.9607543 ], [ -6.8903589, 33.9607543 ], [ -6.8902549, 33.9607857 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1102701211, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8876603, 33.963334 ], [ -6.885841, 33.9626484 ], [ -6.885076, 33.9623601 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1102701212, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8855163, 33.9635424 ], [ -6.8854015, 33.963233 ], [ -6.8853689, 33.9631034 ], [ -6.8853885, 33.962971 ], [ -6.8854308, 33.9628819 ], [ -6.8855513, 33.96279 ], [ -6.8857272, 33.9627171 ], [ -6.885841, 33.9626484 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1102701213, "name": null, "ref": null, "type": "service", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8854663, 33.9635659 ], [ -6.8854509, 33.9635864 ], [ -6.8854444, 33.9636099 ], [ -6.8854473, 33.9636339 ], [ -6.8854595, 33.9636558 ], [ -6.8854797, 33.9636733 ], [ -6.8855056, 33.9636844 ], [ -6.8855344, 33.9636879 ], [ -6.8855631, 33.9636835 ], [ -6.8855884, 33.9636716 ], [ -6.8856078, 33.9636534 ], [ -6.8856189, 33.9636311 ], [ -6.8856208, 33.963607 ], [ -6.885613, 33.9635836 ], [ -6.8855966, 33.9635637 ], [ -6.8855732, 33.9635492 ], [ -6.8855454, 33.9635419 ], [ -6.8855163, 33.9635424 ], [ -6.8854889, 33.9635507 ], [ -6.8854663, 33.9635659 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1102701214, "name": null, "ref": null, "type": "service", "oneway": 1, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8854595, 33.9636558 ], [ -6.8854276, 33.96373 ], [ -6.8855056, 33.9636844 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1102701215, "name": null, "ref": null, "type": "service", "oneway": 0, "bridge": 0, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8850241, 33.9641161 ], [ -6.8854276, 33.96373 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1, "name": "zayda", "ref": null, "type": null, "oneway": null, "bridge": null, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.892066867961415, 33.959720845556632 ], [ -6.891770247511481, 33.958639172457211 ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1, "name": "zayda2", "ref": null, "type": null, "oneway": null, "bridge": null, "maxspeed": null }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.891386686584844, 33.960251072444997 ], [ -6.891330430982268, 33.959852342133104 ], [ -6.891279289525383, 33.959640250780268 ], [ -6.891187234902992, 33.959356047538492 ], [ -6.891069609552154, 33.959042150317323 ], [ -6.890900842744434, 33.958634930574831 ], [ -6.890803673976353, 33.958473738888301 ] ] ] } }
+]
+};
+    var myStyle = {
+    "color": "black",
+    "weight": 2,
+    "opacity": 0.65
+};
+L.geoJSON(geojsonFeature, {style: myStyle}).addTo(map);
+ /////////////////////////////////////////
+    var geojsonFeature = {
+"type": "FeatureCollection",
+"name": "Building",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm_id": 252754387, "name": null, "type": null, "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.8873243, 33.9629089 ], [ -6.8863025, 33.9625154 ], [ -6.8867368, 33.9616951 ], [ -6.8877454, 33.9620592 ], [ -6.8873243, 33.9629089 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 279206878, "name": null, "type": null, "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.891444039292532, 33.956669638059097 ], [ -6.891191889839986, 33.956506665480127 ], [ -6.891352348582515, 33.956330111500634 ], [ -6.891607772703273, 33.956484935779343 ], [ -6.891444039292532, 33.956669638059097 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 279206879, "name": null, "type": null, "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.891196724004645, 33.956062343373006 ], [ -6.891074824004645, 33.956197743373004 ], [ -6.891099224004645, 33.956212843373009 ], [ -6.890982624004645, 33.956342643373006 ], [ -6.890869924004645, 33.956272943373008 ], [ -6.890942024004644, 33.956192743373009 ], [ -6.890812124004644, 33.956112443373009 ], [ -6.890740524004644, 33.956191943373007 ], [ -6.890607824004644, 33.956109843373007 ], [ -6.890761224004645, 33.95593924337301 ], [ -6.890964224004644, 33.956064843373007 ], [ -6.891000624004644, 33.956024343373009 ], [ -6.890961724004645, 33.956000243373005 ], [ -6.891048924004645, 33.955903343373009 ], [ -6.891282924004645, 33.956048243373004 ], [ -6.891243924004645, 33.956091543373006 ], [ -6.891196724004645, 33.956062343373006 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 279206880, "name": null, "type": null, "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.890422342809494, 33.956289368222571 ], [ -6.890245510725892, 33.956446908789616 ], [ -6.890196390702668, 33.956430611503102 ], [ -6.890176742693379, 33.956414314213468 ], [ -6.890150545347661, 33.956400733136391 ], [ -6.8901374466748, 33.956368138542558 ], [ -6.890327377431263, 33.956213314051311 ], [ -6.890422342809494, 33.956289368222571 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 279206881, "name": null, "type": null, "height": 30 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.890408834803109, 33.955906380455104 ], [ -6.890376497454487, 33.955901627049997 ], [ -6.89039696413083, 33.955876501904299 ], [ -6.890422342809496, 33.955885329659026 ], [ -6.890408834803109, 33.955906380455104 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 279301672, "name": null, "type": null, "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.885151042574165, 33.961562990429009 ], [ -6.885183, 33.9615745 ], [ -6.885145, 33.9616508 ], [ -6.885110181644513, 33.961638858686747 ], [ -6.885151042574165, 33.961562990429009 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 279320685, "name": null, "type": null, "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.8921885, 33.9580017 ], [ -6.891988, 33.9580489 ], [ -6.8919524, 33.9579449 ], [ -6.8918059, 33.9579794 ], [ -6.8918404, 33.9580802 ], [ -6.8916489, 33.9581253 ], [ -6.8915765, 33.9579138 ], [ -6.8917155, 33.9578811 ], [ -6.8917061, 33.9578536 ], [ -6.8918988, 33.9578082 ], [ -6.8919113, 33.9578446 ], [ -6.8921181, 33.9577959 ], [ -6.8921885, 33.9580017 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 653412967, "name": null, "type": "roof", "height": 10, "img": "<img src=\"https://fr.zenit.org/wp-content/uploads/sites/4/2019/02/24129618_1649714365050828_1869780546919701446_n.jpg\"  width=\"200\" height=\"200\">" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.889967836363761, 33.960945424835309 ], [ -6.889645254327654, 33.960704132542411 ], [ -6.889708194691439, 33.960542837668903 ], [ -6.889757494691438, 33.960415037668909 ], [ -6.889772894691439, 33.960333237668905 ], [ -6.889788294691439, 33.960246337668906 ], [ -6.889783694691439, 33.960155637668905 ], [ -6.889768294691438, 33.960038137668903 ], [ -6.889743594691438, 33.959917937668905 ], [ -6.889705094691439, 33.959795337668908 ], [ -6.889663494691439, 33.959679037668906 ], [ -6.889614194691439, 33.959566637668907 ], [ -6.889544894691439, 33.959446537668903 ], [ -6.889473994691439, 33.959354537668908 ], [ -6.889409294691439, 33.959286737668904 ], [ -6.889329194691439, 33.959212637668905 ], [ -6.889249094691439, 33.959160237668904 ], [ -6.889092797886878, 33.959090087526349 ], [ -6.889207201613995, 33.958705237297529 ], [ -6.889472694691439, 33.958782537668903 ], [ -6.889704394691439, 33.958903937668907 ], [ -6.889887394691439, 33.959106237668905 ], [ -6.890049994691439, 33.959342237668906 ], [ -6.890159794691439, 33.959595137668906 ], [ -6.890234594691439, 33.959841237668904 ], [ -6.890281694691438, 33.960161637668904 ], [ -6.890289894691438, 33.960411237668907 ], [ -6.890257294691438, 33.96058653766891 ], [ -6.890196394691439, 33.960741637668903 ], [ -6.890102794691439, 33.960859637668904 ], [ -6.889967836363761, 33.960945424835309 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 2, "name": "piscine couverte", "type": null, "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.886027738065151, 33.963785802900752 ], [ -6.885795236621895, 33.963641855846902 ], [ -6.885657700556871, 33.963473464644558 ], [ -6.885611855201862, 33.963516920470624 ], [ -6.885513615155416, 33.963386552925826 ], [ -6.885618404538292, 33.963332233056526 ], [ -6.885546361837566, 33.96316384124124 ], [ -6.885657700556871, 33.963006313112253 ], [ -6.885834532640472, 33.962984585071567 ], [ -6.885860729986192, 33.962919400916199 ], [ -6.886024463396935, 33.962941128973547 ], [ -6.886050660742655, 33.963022609139124 ], [ -6.886194746144108, 33.96301717713051 ], [ -6.886410874246289, 33.963114953232434 ], [ -6.886568058320603, 33.963201865228669 ], [ -6.886672847703479, 33.96334309703316 ], [ -6.886764538413495, 33.96329964111829 ], [ -6.886856229123511, 33.963462600684572 ], [ -6.886757989077065, 33.963495192560366 ], [ -6.886823482441361, 33.963625559938663 ], [ -6.886764538413495, 33.963793950839907 ], [ -6.886672847703479, 33.963842838458476 ], [ -6.886522212965594, 33.963842838458476 ], [ -6.886502564956306, 33.963913453857913 ], [ -6.886414148914505, 33.963918885809292 ], [ -6.886306084863414, 33.963910737882095 ], [ -6.8863028101952, 33.963869998234422 ], [ -6.886201295480538, 33.963845554436467 ], [ -6.886106330102308, 33.963815678673853 ], [ -6.886027738065151, 33.963785802900752 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 4, "name": "centre national de formation et de pÃ©rfectionnem", "type": null, "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.887017817576583, 33.960472312472291 ], [ -6.886819821067909, 33.960804251706868 ], [ -6.88650386919237, 33.960678464359859 ], [ -6.886697653009368, 33.960350018743576 ], [ -6.887017817576583, 33.960472312472291 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 5, "name": "batiment", "type": null, "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.887098747446419, 33.959879542709892 ], [ -6.886962600365203, 33.95985033813713 ], [ -6.886810021739701, 33.960196898420755 ], [ -6.886718474564399, 33.960163800027686 ], [ -6.887030673905812, 33.959536875091594 ], [ -6.887244283981515, 33.959603072352699 ], [ -6.887098747446419, 33.959879542709892 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": 1, "name": "comitÃ© national olympique marocain", "type": null, "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.891294631962451, 33.959644492612497 ], [ -6.891008239803892, 33.958919136225589 ], [ -6.891115636863352, 33.958885201272423 ], [ -6.891304860253826, 33.958889443142311 ], [ -6.891488969498614, 33.95892761996177 ], [ -6.891627051432203, 33.958999731685097 ], [ -6.891734448491661, 33.959105778226018 ], [ -6.891749790928728, 33.959254243161233 ], [ -6.891693535326154, 33.959411191525319 ], [ -6.891575909975319, 33.959529963067844 ], [ -6.891432713896039, 33.959619041615909 ], [ -6.891294631962451, 33.959644492612497 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": null, "name": "KAD", "type": "GT", "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.88445139465323, 33.961988823751632 ], [ -6.884359703943207, 33.962147711780993 ], [ -6.8843474239374, 33.962165705492097 ], [ -6.884326138594001, 33.962201692902909 ], [ -6.884228307881076, 33.96216163144463 ], [ -6.884250002557999, 33.962124286000439 ], [ -6.884341693268021, 33.961944348630439 ], [ -6.88445139465323, 33.961988823751632 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": null, "name": "DS", "type": "FQGGQ", "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.885038378930736, 33.961364472403055 ], [ -6.884948325554827, 33.961539657909555 ], [ -6.885162816322899, 33.96162521349089 ], [ -6.885136618977183, 33.961679534450269 ], [ -6.884915578872678, 33.961608917196322 ], [ -6.884864821515349, 33.961689040614594 ], [ -6.88466015475192, 33.96161299127025 ], [ -6.884825525496769, 33.961292496857851 ], [ -6.884918853540892, 33.961330521681781 ], [ -6.884923765543215, 33.961310151242515 ], [ -6.885038378930736, 33.961364472403055 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": null, "name": "GS", "type": "SG", "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.887242639972867, 33.963906663918202 ], [ -6.887087093232661, 33.96385098639216 ], [ -6.887057621218728, 33.963914811845783 ], [ -6.887206618622503, 33.963973205303937 ], [ -6.887242639972867, 33.963906663918202 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": null, "name": "SGF", "type": "HB", "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.887683082847762, 33.964073696277644 ], [ -6.88784354159029, 33.964140237532717 ], [ -6.887804245571711, 33.964204062769298 ], [ -6.887692906852408, 33.964160607294282 ], [ -6.887696181520622, 33.964145669469616 ], [ -6.887656885502043, 33.964134805595492 ], [ -6.887683082847762, 33.964073696277644 ] ] ] ] } },
+{ "type": "Feature", "properties": { "osm_id": null, "name": "base mosq", "type": "1", "height": 10 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.890422342809496, 33.955885329659026 ], [ -6.89039696413083, 33.955876501904299 ], [ -6.890376497454487, 33.955901627049997 ], [ -6.89029544941617, 33.955881934368868 ], [ -6.890324921430103, 33.955802484540072 ], [ -6.890448540155213, 33.955840511817819 ], [ -6.890422342809496, 33.955885329659026 ] ] ] ] } }
+]
+};
+   var myStyle = {
+    "color": "#964B00",
+    "weight": 1,
+    "opacity": 0.5
+};
+
+L.geoJSON(geojsonFeature, {style: myStyle}).addTo(map);
+ ////////////////////////
+    var geojsonFeature ={
+"type": "FeatureCollection",
+"name": "parkings",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 1 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.889072780359751, 33.957299437578015 ], [ -6.889443926925959, 33.957625394757628 ], [ -6.889522522669393, 33.957730425138365 ], [ -6.889815073492172, 33.958034650337069 ], [ -6.889998463560181, 33.958313522480246 ], [ -6.888671068782204, 33.958320765900353 ], [ -6.888483312284002, 33.95835336128323 ], [ -6.888269357204657, 33.958418552011494 ], [ -6.8881558300197, 33.958425795422663 ], [ -6.888085967136648, 33.958407686893594 ], [ -6.888046669264931, 33.958378713239036 ], [ -6.888033569974358, 33.958331631029367 ], [ -6.888168929310273, 33.958172275664829 ], [ -6.888278090065039, 33.958179519096966 ], [ -6.889072780359751, 33.957299437578015 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 2 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.890601779693958, 33.955132271737398 ], [ -6.891392068072281, 33.954875305696902 ], [ -6.894376196988831, 33.956805154131636 ], [ -6.893889379347782, 33.957292853464992 ], [ -6.890601779693958, 33.955132271737398 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 3 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.895013877862115, 33.957220066021485 ], [ -6.896538497644172, 33.958216777311833 ], [ -6.895322831428438, 33.959468969019284 ], [ -6.893809928673786, 33.958480385901858 ], [ -6.895013877862115, 33.957220066021485 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 1 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.884984111140182, 33.964384983662598 ], [ -6.885168460371084, 33.964496181035749 ], [ -6.885302532539016, 33.964642127367398 ], [ -6.885419845685953, 33.964725525158784 ], [ -6.885587435895865, 33.96487147109692 ], [ -6.885780164637266, 33.964927069483672 ], [ -6.885914236805196, 33.965052165720984 ], [ -6.885989652399657, 33.965218960417879 ], [ -6.88617400163056, 33.965246759502236 ], [ -6.88637958094138, 33.966650088873784 ], [ -6.88620150170899, 33.966806732090745 ], [ -6.88585613592496, 33.966815683123016 ], [ -6.885510770140931, 33.966654564398276 ], [ -6.884092324528068, 33.965611451304497 ], [ -6.883966441148384, 33.965363490772873 ], [ -6.883997911993303, 33.964985023304578 ], [ -6.884218207907753, 33.964489097866 ], [ -6.884296885020055, 33.964306387765021 ], [ -6.884984111140182, 33.964384983662598 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 1 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.886511817323991, 33.966692087804887 ], [ -6.886293002045046, 33.965407639252618 ], [ -6.886443379413881, 33.965385629972921 ], [ -6.88652299096209, 33.965436984950024 ], [ -6.88658491105514, 33.965429648526616 ], [ -6.887478329540584, 33.966031233143944 ], [ -6.887531403906054, 33.966229314952606 ], [ -6.88750486672332, 33.966346696547475 ], [ -6.887257186351117, 33.966486086980964 ], [ -6.886511817323991, 33.966692087804887 ] ] ] ] } }
+]
+};
+     var myStyle = {
+    "color": "#000ff0",
+    "weight": 2,
+    "opacity": 0.2
+};
+
+L.geoJSON(geojsonFeature, {style: myStyle}).addTo(map);
+ ////////////////////////
+    var geojsonFeature ={
+"type": "FeatureCollection",
+"name": "piscine",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 1 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.8872508266434, 33.961024964580517 ], [ -6.887169778605082, 33.961186570473032 ], [ -6.887058439885776, 33.961147187552726 ], [ -6.887139487924095, 33.960984902568079 ], [ -6.8872508266434, 33.961024964580517 ] ] ] ] } }
+]
+} ;
+     var myStyle = {
+    "color": "#2bfafa",
+    "weight": 2,
+    "opacity": 0.65
+};
+
+L.geoJSON(geojsonFeature, {style: myStyle}).addTo(map);
+////////////////////////
+     var geojsonFeature ={
+"type": "FeatureCollection",
+"name": "pst_cdt",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 1 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.888182543502444, 33.965711057038774 ], [ -6.889238900488311, 33.965553356555077 ], [ -6.889328690832109, 33.965934465556849 ], [ -6.888171979932584, 33.96615349294607 ], [ -6.887443093612336, 33.965610303985699 ], [ -6.887664928579368, 33.965404416940864 ], [ -6.888182543502444, 33.965711057038774 ] ] ] ] } }
+]
+};
+    var myStyle = {
+    "color": "#FF0000",
+    "weight": 2,
+    "opacity": 0.65
+};
+
+L.geoJSON(geojsonFeature, {style: myStyle}).addTo(map);
+////////////////////////
+    var geojsonFeature ={
+"type": "FeatureCollection",
+"name": "pst_crse",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 18 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.889582390412389, 33.960379216962565 ], [ -6.889529995720949, 33.960474280011077 ], [ -6.889448129015578, 33.960534033872904 ], [ -6.889346614300917, 33.960588355529048 ], [ -6.889225451576968, 33.960620948506083 ], [ -6.889006048806571, 33.960620948506083 ], [ -6.888825942054754, 33.960544898206919 ], [ -6.888691680657945, 33.960411810019743 ], [ -6.888626187293649, 33.960262425071846 ], [ -6.888377312509318, 33.959480186879802 ], [ -6.888390411182177, 33.959395987201184 ], [ -6.888442805873618, 33.959271045589027 ], [ -6.888514848574344, 33.959196352146307 ], [ -6.888603264616147, 33.959124374766724 ], [ -6.888706416664914, 33.959089065086552 ], [ -6.888780096699749, 33.959070052175775 ], [ -6.888955291449244, 33.959068694110549 ], [ -6.889097739516591, 33.959101287669817 ], [ -6.889212352904109, 33.959158326368446 ], [ -6.889307318282341, 33.959223513405796 ], [ -6.889367899644316, 33.959345738966199 ], [ -6.889415382333431, 33.959481544938441 ], [ -6.889667531785975, 33.960289585990978 ], [ -6.889647883776687, 33.960330327353418 ], [ -6.889624961099182, 33.960362920429311 ], [ -6.889585665080605, 33.960376500873913 ] ] ] } },
+{ "type": "Feature", "properties": { "id": 2 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.8902788149997, 33.956615531262194 ], [ -6.890023068754375, 33.956687440206089 ], [ -6.889936375111893, 33.956755753646519 ], [ -6.889862685515783, 33.956885189488489 ], [ -6.889875689562155, 33.957064961164541 ], [ -6.890220783976937, 33.957965189952056 ], [ -6.89033917584458, 33.958087093127226 ], [ -6.890461650190421, 33.95813788606533 ], [ -6.890596371970843, 33.958154817037965 ], [ -6.890763753576824, 33.95813788606533 ], [ -6.890882145444468, 33.958083706930275 ], [ -6.891000537312112, 33.95799905196268 ], [ -6.891086269354201, 33.957921169318098 ], [ -6.891098516788784, 33.957850059015115 ], [ -6.891106681745172, 33.957762017605283 ], [ -6.891090351832396, 33.957684134743708 ], [ -6.890747423664045, 33.956705513580978 ], [ -6.89058412453626, 33.956647947279684 ], [ -6.890400413017499, 33.956607312220036 ], [ -6.890276437657175, 33.956615419188594 ] ] ] } },
+{ "type": "Feature", "properties": { "id": 2 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.890498793174751, 33.956714934632423 ], [ -6.8902457042097, 33.956706537547248 ], [ -6.890100599869735, 33.956759719072728 ], [ -6.889995989764181, 33.956877278116394 ], [ -6.889972368127441, 33.957039621290619 ], [ -6.890316569119914, 33.957932503211772 ], [ -6.890394183069197, 33.95801367383087 ], [ -6.890529163850559, 33.958061256571575 ], [ -6.890677642710056, 33.958064055555496 ], [ -6.890809248971884, 33.958019271801753 ], [ -6.890917233596974, 33.957960493089175 ], [ -6.890974600429053, 33.957887719388786 ], [ -6.891004971104858, 33.957803749657131 ], [ -6.890984723987655, 33.957711382856594 ], [ -6.890623650397512, 33.956754121018989 ], [ -6.89049758601996, 33.956714343007683 ] ] ] } },
+{ "type": "Feature", "properties": { "id": 3 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.891842666305374, 33.957577844943408 ], [ -6.891378063071636, 33.957667930405329 ], [ -6.891353927838717, 33.957517787915798 ], [ -6.891191015016496, 33.957382659448669 ], [ -6.891112575509503, 33.957217502141852 ], [ -6.89108844027658, 33.956997291900699 ], [ -6.891130676934194, 33.956877176983483 ], [ -6.891257386907031, 33.956747052298475 ], [ -6.891498739236242, 33.956676985077969 ], [ -6.891830598688913, 33.956621932221374 ], [ -6.892349506196723, 33.956496811960278 ], [ -6.89250035140248, 33.956496811960278 ], [ -6.89268739945762, 33.956546860086789 ], [ -6.892850312279842, 33.956691999487219 ], [ -6.892934785595066, 33.956922220097312 ], [ -6.892892548937454, 33.957112401870582 ], [ -6.892832210855149, 33.957182468732512 ], [ -6.892916684170375, 33.957177463958573 ], [ -6.892946853211526, 33.957297578451865 ], [ -6.891839676307841, 33.957579094536925 ] ] ] } },
+{ "type": "Feature", "properties": { "id": 3 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.891525830883206, 33.957496158627968 ], [ -6.891320960225977, 33.957352779722413 ], [ -6.89123132931344, 33.957150986779354 ], [ -6.891244133729516, 33.956933262277701 ], [ -6.891372177890284, 33.956827055001547 ], [ -6.891621864003781, 33.956763330572208 ], [ -6.89195477882178, 33.956688985344343 ], [ -6.892364520136238, 33.956604019290083 ], [ -6.892537379753273, 33.956604019290083 ], [ -6.892665423914043, 33.956667743838722 ], [ -6.89275505482658, 33.956784572053948 ], [ -6.892787065866773, 33.956906710471102 ], [ -6.892799870282849, 33.957055400481387 ], [ -6.892729445994427, 33.957209400575252 ], [ -6.891525435483267, 33.957495701103191 ] ] ] } },
+{ "type": "Feature", "properties": { "id": 17 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.889497249038802, 33.96035748825085 ], [ -6.889405558328787, 33.960444403064407 ], [ -6.889326966291631, 33.960498724777786 ], [ -6.889272934266086, 33.96051773736928 ], [ -6.889166507549103, 33.96053810799831 ], [ -6.889071542170871, 33.960534033872896 ], [ -6.888938918108169, 33.960498724777786 ], [ -6.888830854057079, 33.960443045021144 ], [ -6.88877191002921, 33.960394155448661 ], [ -6.888727702008311, 33.960299092310613 ], [ -6.888694136659108, 33.96019486224791 ], [ -6.888608995285522, 33.959939548981488 ], [ -6.88851402990729, 33.959667938282429 ], [ -6.88845181121121, 33.959499539213525 ], [ -6.888438712538351, 33.959409907315113 ], [ -6.888543501921226, 33.95930126246315 ], [ -6.888635192631242, 33.959200765851577 ], [ -6.88879565137377, 33.959162740075691 ], [ -6.889008504807735, 33.959154591692929 ], [ -6.889129667531686, 33.959200765851577 ], [ -6.889260654260281, 33.959303978586149 ], [ -6.889349070302081, 33.959551145415219 ], [ -6.889421113002808, 33.959811892060934 ], [ -6.889470233026032, 33.959953129493677 ], [ -6.889516078381039, 33.960113379373787 ], [ -6.889558649067832, 33.960232887562462 ], [ -6.889548825063189, 33.960306222049674 ], [ -6.889496839705276, 33.960357148739703 ] ] ] } }
+]
+};
+    var myStyle = {
+    "color": "#Fd6c9e",
+    "weight": 3,
+    "opacity": 0.7
+};
+
+L.geoJSON(geojsonFeature, {style: myStyle}).addTo(map);
+////////////////////////
+    var geojsonFeature ={
+"type": "FeatureCollection",
+"name": "railway",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "osm_id": 137318466, "name": null, "type": "rail" }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.890508205101817, 33.954185940767815 ], [ -6.8898953, 33.9549125 ], [ -6.8883171, 33.9567424 ], [ -6.8874366, 33.9577786 ], [ -6.8865746, 33.9588203 ], [ -6.88539, 33.9602038 ], [ -6.8843555, 33.9614847 ], [ -6.8838399, 33.9622095 ], [ -6.8834511, 33.9628528 ], [ -6.8825011, 33.9648068 ], [ -6.881638587323652, 33.966824878485255 ] ] ] } }
+]
+} ;
+    var myStyle = {
+    "color": "#Ffff00",
+    "weight": 2,
+    "opacity": 0.65
+};
+
+L.geoJSON(geojsonFeature, {style: myStyle}).addTo(map);
+////////////////////////
+    var geojsonFeature ={
+"type": "FeatureCollection",
+"name": "terrains",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 1 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.889512394379656, 33.96023186902729 ], [ -6.888846818064934, 33.960396871536595 ], [ -6.888811615381623, 33.960402982734493 ], [ -6.888491516563596, 33.959464569203547 ], [ -6.889200482232164, 33.959301601978297 ], [ -6.889512394379656, 33.96023186902729 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 2 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.89065823843806, 33.956977133743599 ], [ -6.890957092641654, 33.957767269187009 ], [ -6.890957092641654, 33.957767269187009 ], [ -6.890363119912013, 33.957900506989738 ], [ -6.890075472741054, 33.957113471363556 ], [ -6.89065823843806, 33.956977133743599 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 3 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.892705195889379, 33.957193524880267 ], [ -6.891625783378975, 33.957448167342051 ], [ -6.891439127290716, 33.956877767169217 ], [ -6.892493570455974, 33.956637383093877 ], [ -6.892491933121867, 33.95663195067754 ], [ -6.892705195889379, 33.957193524880267 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 4 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.893471983625667, 33.962606770103065 ], [ -6.892824578033353, 33.962723637725759 ], [ -6.892550382723665, 33.961855023178529 ], [ -6.893205404852361, 33.961697092307922 ], [ -6.893471983625667, 33.962606770103065 ] ] ] ] } }
+]
+};
+    var myStyle = {
+    "color": "#008020",
+    "weight": 2,
+    "opacity": 0.65
+};
+
+L.geoJSON(geojsonFeature, {style: myStyle}).addTo(map);
+////////////////////////
+    var geojsonFeature ={
+"type": "FeatureCollection",
+"name": "tribune",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 2 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.889639894691439, 33.960628737668905 ], [ -6.889332696961, 33.960725517556426 ], [ -6.888959384784505, 33.960709221089495 ], [ -6.888717059336606, 33.960573417077036 ], [ -6.888507480570856, 33.960296376219361 ], [ -6.888441987206557, 33.960079088640896 ], [ -6.888356845832972, 33.959796613959149 ], [ -6.888304451141535, 33.959416358098785 ], [ -6.888474733888707, 33.959150177985251 ], [ -6.888749806018754, 33.959019803748227 ], [ -6.888890860711485, 33.959002224730135 ], [ -6.889043951592421, 33.959017560491702 ], [ -6.889101513298947, 33.959063666507618 ] ] ] } },
+{ "type": "Feature", "properties": { "id": 5 }, "geometry": { "type": "MultiLineString", "coordinates": [ [ [ -6.889967836363761, 33.960945424835309 ], [ -6.889805376270499, 33.961005951440811 ], [ -6.889582117489199, 33.961101441817185 ], [ -6.889327449539747, 33.961166148328147 ], [ -6.889047869751792, 33.961157217826923 ], [ -6.889024526357619, 33.961155981993137 ], [ -6.8886911882815, 33.961075929222609 ], [ -6.888392048516278, 33.960847061940477 ], [ -6.88821849110089, 33.960635207929606 ], [ -6.888005637666925, 33.960265820187225 ], [ -6.887917221625123, 33.959931740185972 ], [ -6.88787465093833, 33.959592226645491 ], [ -6.887923770961553, 33.959349134118135 ], [ -6.888015461671571, 33.959146782825378 ], [ -6.888192293755173, 33.958948505252877 ], [ -6.888447717875933, 33.958786895108823 ], [ -6.888753899354024, 33.958695904388421 ], [ -6.889086278177831, 33.958702694744062 ], [ -6.889198901105042, 33.958727007383395 ] ] ] } }
+]
+};
+    var myStyle = {
+    "color": "FF0000",
+    "weight": 2,
+    "opacity": 0.65
+};
+
+L.geoJSON(geojsonFeature, {style: myStyle}).addTo(map);
+////////////////////////
+    var geojsonFeature ={
+"type": "FeatureCollection",
+"name": "veg",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "id": 1 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.891287027676038, 33.959649919153797 ], [ -6.891449013680133, 33.959624500401596 ], [ -6.891567219683121, 33.959550059726489 ], [ -6.891663535685556, 33.959466540842712 ], [ -6.89172263868705, 33.959401178180826 ], [ -6.891753284687826, 33.959317659150905 ], [ -6.891770952981195, 33.959224842548586 ], [ -6.891770952981195, 33.95915935271514 ], [ -6.891676204459921, 33.958982529913023 ], [ -6.891549873098224, 33.958913765390712 ], [ -6.891368271765783, 33.958867922344965 ], [ -6.891190618288395, 33.958861373336411 ], [ -6.891001121245849, 33.958884294864149 ], [ -6.890934007709946, 33.958671451869122 ], [ -6.890819519913409, 33.958481529977853 ], [ -6.89176700512614, 33.958628883206217 ], [ -6.891849910082255, 33.958995627910966 ], [ -6.891802535821618, 33.959005451408096 ], [ -6.89189333648784, 33.959372194489553 ], [ -6.891944658603529, 33.959355822064275 ], [ -6.892043354979855, 33.959722563635324 ], [ -6.89140380246126, 33.960223556262186 ], [ -6.891287027676038, 33.959649919153797 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 2 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.891329001862865, 33.960223582933821 ], [ -6.89103411432825, 33.960488001187422 ], [ -6.890954414994568, 33.960031879186026 ], [ -6.891050054194987, 33.959998826772051 ], [ -6.890699377126793, 33.958848594766664 ], [ -6.890579828126272, 33.958888258198158 ], [ -6.890340730125231, 33.958451959434818 ], [ -6.890802986260578, 33.958498233652151 ], [ -6.890874715660889, 33.958643666742773 ], [ -6.891177573128875, 33.959496428498653 ], [ -6.891281182262659, 33.959959163858343 ], [ -6.891329001862865, 33.960223582933821 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 3 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.893068693656012, 33.956786248053149 ], [ -6.893868374848035, 33.957313487135167 ], [ -6.893184886649725, 33.957999459974694 ], [ -6.893307914525421, 33.958186542516515 ], [ -6.89273378443884, 33.958736449424251 ], [ -6.892091305532428, 33.958657081636439 ], [ -6.891524010327831, 33.958470000129317 ], [ -6.891510340563864, 33.958243234114619 ], [ -6.89231685663787, 33.958118512548907 ], [ -6.892528737979347, 33.957449548303394 ], [ -6.89300034483618, 33.957364510098763 ], [ -6.893068693656012, 33.956786248053149 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 4 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.893638692775538, 33.958412941119953 ], [ -6.893551895408922, 33.958456136226317 ], [ -6.895438758525794, 33.959474651511776 ], [ -6.896576866437557, 33.958232558068161 ], [ -6.901548600999472, 33.961784897082651 ], [ -6.901518650791266, 33.962405920138671 ], [ -6.901308999333837, 33.962877894629059 ], [ -6.900709995169752, 33.963474069189566 ], [ -6.899901339548234, 33.963946037753288 ], [ -6.889478667093132, 33.966007764455867 ], [ -6.889426433309445, 33.965497536748686 ], [ -6.888317916344502, 33.965637127651966 ], [ -6.888109911309535, 33.965550485049306 ], [ -6.887539971950085, 33.964397584454055 ], [ -6.888607378228414, 33.962414510322837 ], [ -6.889731712841588, 33.962001364059716 ], [ -6.889603624088188, 33.961777083819428 ], [ -6.891923453733089, 33.960124474344376 ], [ -6.893638692775538, 33.958412941119953 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 5 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.884678903361621, 33.96766208191665 ], [ -6.883600657497294, 33.967636532012889 ], [ -6.883462025886168, 33.967432132506552 ], [ -6.883431218861471, 33.965988547007179 ], [ -6.883708482083728, 33.965988547007179 ], [ -6.885264236830827, 33.967048882108124 ], [ -6.885295043855522, 33.96735548256504 ], [ -6.884678903361621, 33.96766208191665 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 6 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.885123252772089, 33.96382832012263 ], [ -6.884813524084034, 33.963292208497059 ], [ -6.885271383883768, 33.962476865589515 ], [ -6.885729243683501, 33.96265557155305 ], [ -6.885325249742561, 33.962878953479546 ], [ -6.88525791741907, 33.963191687191092 ], [ -6.885446447924844, 33.963526757749008 ], [ -6.885123252772089, 33.96382832012263 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 7 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.88605887734059, 33.962115323469341 ], [ -6.885871529492395, 33.962563204318101 ], [ -6.885331526871126, 33.962371255671677 ], [ -6.885573977027614, 33.961918803577078 ], [ -6.88605887734059, 33.962115323469341 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 8 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.886345889815198, 33.960664281354383 ], [ -6.885825407083004, 33.961713228829019 ], [ -6.885688437942955, 33.961648853363762 ], [ -6.886272839607171, 33.960615052454791 ], [ -6.886345889815198, 33.960664281354383 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 9 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.888663574992706, 33.957220726084884 ], [ -6.887133268921218, 33.959168045360975 ], [ -6.886420393422079, 33.96054769803343 ], [ -6.886325343355527, 33.960524047033253 ], [ -6.887057228867977, 33.959144393977233 ], [ -6.888663574992706, 33.957220726084884 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 1 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.88820784842919, 33.961820089771642 ], [ -6.88776249355197, 33.960668479908513 ], [ -6.887880381607704, 33.9606576155903 ], [ -6.888122707055604, 33.960972680255431 ], [ -6.88820129909276, 33.961189965551497 ], [ -6.888260243120629, 33.961505028245014 ], [ -6.888266792457059, 33.961798361427952 ], [ -6.888188200419901, 33.961896138930832 ], [ -6.888070312364167, 33.961934163484912 ], [ -6.88651811963032, 33.961352929159347 ], [ -6.886275794182422, 33.961809225600483 ], [ -6.885941778024507, 33.961711447997722 ], [ -6.886459175602455, 33.960733665788716 ], [ -6.886819821067908, 33.960804251706868 ], [ -6.886904530479676, 33.960722801478802 ], [ -6.887153405264004, 33.960793419468352 ], [ -6.886956925171113, 33.961184533425872 ], [ -6.887169778605081, 33.961186570473032 ], [ -6.887169778605081, 33.961186570473032 ], [ -6.88776249355197, 33.960673912067115 ], [ -6.88820784842919, 33.961820089771642 ] ] ] ] } },
+{ "type": "Feature", "properties": { "id": 3 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -6.88883985939466, 33.957352082343021 ], [ -6.888027741677375, 33.958308174183017 ], [ -6.887949149640217, 33.958460278712401 ], [ -6.88813253106025, 33.958525466284591 ], [ -6.887805064238763, 33.958862267945271 ], [ -6.887536541445147, 33.959378332419263 ], [ -6.887536541445148, 33.95956438647503 ], [ -6.887626594821058, 33.960161929595643 ], [ -6.887764130886081, 33.960506873031783 ], [ -6.887695362853568, 33.960555762539478 ], [ -6.887498882760677, 33.960493292607985 ], [ -6.887312226672432, 33.960428106543596 ], [ -6.887338424018149, 33.960343907803171 ], [ -6.887423565391737, 33.960384649139598 ], [ -6.887502157428893, 33.960199954924903 ], [ -6.887145218593473, 33.960050569605002 ], [ -6.887056802551672, 33.960047853505834 ], [ -6.887027330537738, 33.960151065212727 ], [ -6.886893069140927, 33.960075014493484 ], [ -6.886978210514515, 33.959912048437602 ], [ -6.887168141270977, 33.959925628954181 ], [ -6.887250007976349, 33.959673030990956 ], [ -6.887295853331358, 33.959553522015817 ], [ -6.887120658581864, 33.959353887330593 ], [ -6.887713373528752, 33.95844941411216 ], [ -6.88883985939466, 33.957352082343021 ] ] ] ] } }
+]
+};
+    var myStyle = {
+    "color": "008020",
+    "weight": 2,
+    "opacity": 0.65
+};
+
+L.geoJSON(geojsonFeature, {style: myStyle}).addTo(map);
+//////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+</body>
+</html>
